@@ -108,10 +108,20 @@ def extract_dates(raw_cert):
 
     not_before = validity.getComponentByName('notBefore')
     not_before = str(not_before.getComponent())
+    if len(not_before) == 13:  # UTCTime
+        if int(not_before[:2]) >= 50:
+            not_before = '19' + not_before
+        else:
+            not_before = '20' + not_before
     not_before = datetime.strptime(not_before, '%Y%m%d%H%M%SZ')
 
     not_after = validity.getComponentByName('notAfter')
     not_after = str(not_after.getComponent())
+    if len(not_after) == 13:  # UTCTime
+        if int(not_after[:2]) >= 50:
+            not_after = '19' + not_after
+        else:
+            not_after = '20' + not_after
     not_after = datetime.strptime(not_after, '%Y%m%d%H%M%SZ')
 
     return not_before, not_after
